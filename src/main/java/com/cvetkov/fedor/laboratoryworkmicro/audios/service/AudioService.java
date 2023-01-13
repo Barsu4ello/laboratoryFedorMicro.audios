@@ -19,5 +19,11 @@ public interface AudioService {
 
     void update(AudioUpdate audioUpdate);
 
-    void disableById(Long id);
+    void deleteById(Long id);
+
+    void addAudiosByIdForUser(Long userId, List<Long> audiosId);
+
+    void deleteAudiosByIdForUser(Long userId, List<Long> audiosId);
+
+    void deleteByAuthorId(Long id);
 }

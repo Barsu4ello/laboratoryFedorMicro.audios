@@ -2,6 +2,7 @@ package com.cvetkov.fedor.laboratoryworkmicro.audios.controller;
 
 import com.cvetkov.fedor.laboratoryworkmicro.audios.service.AudioService;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.request.AudioRequest;
+import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.request.UserAndAudioRequest;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.response.AudioResponse;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.update.AudioUpdate;
 import jakarta.validation.Valid;
@@ -53,6 +54,19 @@ public class AudioController {
     @DeleteMapping("/{id}")
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public void deleteAudio(@PathVariable Long id) {
-        audioService.disableById(id);
+        audioService.deleteById(id);
+    }
+
+
+    @PostMapping("/add-audio")
+    // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    public void addAudiosForUser(@Valid @RequestBody UserAndAudioRequest request) {
+        audioService.addAudiosByIdForUser(request.getUserId(), request.getAudiosId());
+    }
+
+    @DeleteMapping("/delete-audio")
+    // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    public void deleteAudiosForUser(@Valid @RequestBody UserAndAudioRequest request) {
+        audioService.deleteAudiosByIdForUser(request.getUserId(), request.getAudiosId());
     }
 }

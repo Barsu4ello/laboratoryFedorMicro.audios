@@ -1,12 +1,15 @@
 package com.cvetkov.fedor.laboratoryworkmicro.audios.service.impl;
 
+import com.cvetkov.fedor.laboratoryworkmicro.audios.feign.UserFeignClient;
 import com.cvetkov.fedor.laboratoryworkmicro.audios.repository.AuthorRepository;
+import com.cvetkov.fedor.laboratoryworkmicro.audios.service.AudioService;
 import com.cvetkov.fedor.laboratoryworkmicro.audios.service.AuthorService;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.request.AuthorRequest;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.response.AuthorResponse;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.update.AuthorUpdate;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.mapper.AuthorMapper;
 import com.cvetkov.fedor.laboratoryworkmicro.utils.exception.ObjectNotFoundException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +22,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
-//    private final UserRepository userRepository;
+    private final AudioService audioService;
     private final AuthorMapper authorMapper;
+    private final UserFeignClient userFeignClient;
 
     @Override
     public Page<AuthorResponse> getAllPage(Pageable pageable) {
@@ -53,9 +57,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public void deleteById(Long id) {
-//        List<User> users = userRepository.findUSersByAuthorId(id);
-//        users = users.stream().peek(user -> user.setAuthor(null)).collect(Collectors.toList());
-//        userRepository.saveAll(users);
+        userFeignClient.changeAuthorIdToNull(id);
+        audioService.deleteByAuthorId(id);
         authorRepository.deleteById(id);
     }
 }
