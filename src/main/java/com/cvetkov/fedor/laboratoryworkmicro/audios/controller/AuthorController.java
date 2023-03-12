@@ -4,14 +4,14 @@ import com.cvetkov.fedor.laboratoryworkmicro.audios.service.AuthorService;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.request.AuthorRequest;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.response.AuthorResponse;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.update.AuthorUpdate;
+import com.cvetkov.fedor.laboratoryworkmicro.entities.model.Author;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,37 +22,38 @@ public class AuthorController {
 
     @GetMapping
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public Page<AuthorResponse> getAllAuthors(@PageableDefault(size = 5) Pageable pageable) {
+    public Flux<AuthorResponse> getAllAuthors(@PageableDefault(size = 5) Pageable pageable) {
         return authorService.getAllPage(pageable);
     }
 
     @GetMapping("/all-author")
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public List<AuthorResponse> getAllAuthors() {
+    public Flux<AuthorResponse> getAllAuthors() {
         return authorService.getAllList();
     }
 
     @GetMapping("/{id}")
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public AuthorResponse getAuthorById(@PathVariable Long id) {
+    public Mono<AuthorResponse> getAuthorById(@PathVariable Long id) {
         return authorService.findById(id);
     }
 
     @PostMapping
     // @PreAuthorize("hasAuthority('ADMIN')")
-    public void addAuthor(@Valid @RequestBody AuthorRequest authorRequest) {
-        authorService.save(authorRequest);
+    public Mono<Author> addAuthor(@Valid @RequestBody AuthorRequest authorRequest) {
+        return authorService.save(authorRequest);
     }
 
     @PutMapping
     // @PreAuthorize("hasAuthority('ADMIN')")
-    public void updateAuthor(@Valid @RequestBody AuthorUpdate authorUpdate) {
-        authorService.update(authorUpdate);
+    public Mono<Author> updateAuthor(@Valid @RequestBody AuthorUpdate authorUpdate) {
+        return authorService.update(authorUpdate);
     }
 
     @DeleteMapping("/{id}")
     // @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteAuthor(@PathVariable Long id) {
-        authorService.deleteById(id);
+//    @Transactional
+    public Mono<Void> deleteAuthor(@PathVariable Long id) {
+        return authorService.deleteById(id);
     }
 }

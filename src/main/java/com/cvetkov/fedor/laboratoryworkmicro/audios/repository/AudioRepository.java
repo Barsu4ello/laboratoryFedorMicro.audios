@@ -1,18 +1,13 @@
 package com.cvetkov.fedor.laboratoryworkmicro.audios.repository;
 
 import com.cvetkov.fedor.laboratoryworkmicro.entities.model.Audio;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.util.List;
+public interface AudioRepository extends ReactiveCrudRepository<Audio, Long> {
 
-@Repository
-public interface AudioRepository extends JpaRepository<Audio, Long> {
+    Flux<Audio> findAllByAuthorId(Long authorId);
 
-    void deleteAllByAuthorId(Long id);
-
-    @Query(value = "select a.id from audios.audios a where a.author_id = :authorId", nativeQuery = true)
-    List<Long> findIdByAuthorId(@Param("authorId") Long authorId);
+    Mono<Void> deleteAllByAuthorId(Long id);
 }

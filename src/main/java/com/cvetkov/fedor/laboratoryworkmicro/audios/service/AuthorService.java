@@ -3,21 +3,21 @@ package com.cvetkov.fedor.laboratoryworkmicro.audios.service;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.request.AuthorRequest;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.response.AuthorResponse;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.update.AuthorUpdate;
-import org.springframework.data.domain.Page;
+import com.cvetkov.fedor.laboratoryworkmicro.entities.model.Author;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface AuthorService {
-    Page<AuthorResponse> getAllPage(Pageable pageable);
+    Flux<AuthorResponse> getAllPage(Pageable pageable);
 
-    List<AuthorResponse> getAllList();
+    Flux<AuthorResponse> getAllList();
 
-    AuthorResponse findById(Long id);
+    Mono<AuthorResponse> findById(Long id);
 
-    void save(AuthorRequest authorRequest);
+    Mono<Author> save(AuthorRequest authorRequest);
 
-    void update(AuthorUpdate authorUpdate);
+    Mono<Author> update(AuthorUpdate authorUpdate);
 
-    void deleteById(Long id);
+    Mono<Void> deleteById(Long id);
 }

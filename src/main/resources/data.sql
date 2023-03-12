@@ -1,0 +1,51 @@
+-- For h2 db
+-- create schema if not exists audios;
+-- CREATE TABLE IF NOT EXISTS audios.authors
+-- (
+--     id bigserial,
+--     name varchar(256) NOT NULL,
+--     description varchar(256) NOT NULL,
+--     CONSTRAINT authors_pkey PRIMARY KEY (id)
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS audios.audios
+-- (
+--     id bigserial,
+--     title varchar(256) NOT NULL,
+--     audio bytea,
+--     author_id bigint NOT NULL,
+--     CONSTRAINT audios_pkey PRIMARY KEY (id),
+--     CONSTRAINT audios_author_id_fkey FOREIGN KEY (author_id)
+--     REFERENCES audios.authors (id)
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS audios.authors_users
+-- (
+--     author_id bigint NOT NULL,
+--     user_id bigint NOT NULL,
+--     CONSTRAINT authors_users_authors_id_users_id_key UNIQUE (author_id, user_id)
+--     );
+--
+-- CREATE TABLE IF NOT EXISTS audios.uploaded_by_users
+-- (
+--     user_id bigint NOT NULL,
+--     audio_id bigint NOT NULL,
+--     CONSTRAINT uploaded_by_users_pkey UNIQUE (user_id, audio_id),
+--     CONSTRAINT uploaded_by_users_audio_id_fkey FOREIGN KEY (audio_id)
+--     REFERENCES audios.audios (id)
+--     );
+--
+-- insert into audios.authors(name, description)
+-- values ('ivan','ivanovich'),
+--        ('petr','petrov'),
+--        ('stepa','stepanovich');
+--
+-- insert into audios.audios(title, author_id)
+-- values ('ivan audio',1),
+--        ('ivan audio 2',1),
+--        ('petr audio',2);
+--
+-- insert into audios.uploaded_by_users(user_id, audio_id)
+-- values (1,1),
+--        (1,2),
+--        (1,3);

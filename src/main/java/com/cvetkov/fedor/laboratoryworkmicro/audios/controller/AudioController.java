@@ -5,14 +5,15 @@ import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.request.AudioRequest;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.request.UserAndAudioRequest;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.response.AudioResponse;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.update.AudioUpdate;
+import com.cvetkov.fedor.laboratoryworkmicro.entities.model.Audio;
+import com.cvetkov.fedor.laboratoryworkmicro.entities.model.UploadedByUsers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,50 +24,57 @@ public class AudioController {
 
     @GetMapping
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public Page<AudioResponse> getAllAudios(@PageableDefault(size = 5) Pageable pageable) {
+    public Flux<AudioResponse> getAllAudios(@PageableDefault(size = 5) Pageable pageable) {
         return audioService.getAllPage(pageable);
     }
 
     @GetMapping("/all-audio")
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public List<AudioResponse> getAllAudios() {
+    public Flux<AudioResponse> getAllAudios() {
         return audioService.getAllList();
     }
 
     @GetMapping("/{id}")
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public AudioResponse getAudioById(@PathVariable Long id) {
+    public Mono<AudioResponse> getAudioById(@PathVariable Long id) {
         return audioService.findById(id);
     }
 
     @PostMapping
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public void addAudio(@Valid @RequestBody AudioRequest audioRequest) {
-        audioService.save(audioRequest);
+    public Mono<Audio> addAudio(@Valid @RequestBody AudioRequest audioRequest) {
+        return audioService.save(audioRequest);
     }
 
     @PutMapping
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public void updateAudio(@Valid @RequestBody AudioUpdate audioUpdate) {
-        audioService.update(audioUpdate);
+    public Mono<Audio> updateAudio(@Valid @RequestBody AudioUpdate audioUpdate) {
+        return audioService.update(audioUpdate);
     }
 
     @DeleteMapping("/{id}")
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public void deleteAudio(@PathVariable Long id) {
-        audioService.deleteById(id);
+    public Mono<Void> deleteAudio(@PathVariable Long id) {
+        return audioService.deleteById(id);
     }
 
 
     @PostMapping("/add-audio")
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public void addAudiosForUser(@Valid @RequestBody UserAndAudioRequest request) {
-        audioService.addAudiosByIdForUser(request.getUserId(), request.getAudiosId());
+    public Flux<UploadedByUsers> addAudiosForUser(@Valid @RequestBody UserAndAudioRequest request) {
+        return audioService.addAudiosByIdForUser(request.getUserId(), request.getAudiosId());
     }
 
     @DeleteMapping("/delete-audio")
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public void deleteAudiosForUser(@Valid @RequestBody UserAndAudioRequest request) {
-        audioService.deleteAudiosByIdForUser(request.getUserId(), request.getAudiosId());
+    public Mono<Void> deleteAudiosForUser(@Valid @RequestBody UserAndAudioRequest request) {
+       return audioService.deleteAudiosByIdForUser(request.getUserId(), request.getAudiosId());
+    }
+
+    @GetMapping("/all-aploaded-by-users")
+    // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    public Flux<UploadedByUsers> getAllUploadedByUsers() {
+       return audioService.getAllUploadedByUsers();
+
     }
 }

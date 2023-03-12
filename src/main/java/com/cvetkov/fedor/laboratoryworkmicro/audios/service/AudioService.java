@@ -3,27 +3,32 @@ package com.cvetkov.fedor.laboratoryworkmicro.audios.service;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.request.AudioRequest;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.response.AudioResponse;
 import com.cvetkov.fedor.laboratoryworkmicro.entities.dto.update.AudioUpdate;
-import org.springframework.data.domain.Page;
+import com.cvetkov.fedor.laboratoryworkmicro.entities.model.Audio;
+import com.cvetkov.fedor.laboratoryworkmicro.entities.model.UploadedByUsers;
 import org.springframework.data.domain.Pageable;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 public interface AudioService {
-    Page<AudioResponse> getAllPage(Pageable pageable);
+    Flux<AudioResponse> getAllPage(Pageable pageable);
 
-    List<AudioResponse> getAllList();
+    Flux<AudioResponse> getAllList();
 
-    AudioResponse findById(Long id);
+    Mono<AudioResponse> findById(Long id);
 
-    void save(AudioRequest audioRequest);
+    Mono<Audio> save(AudioRequest audioRequest);
 
-    void update(AudioUpdate audioUpdate);
+    Mono<Audio> update(AudioUpdate audioUpdate);
 
-    void deleteById(Long id);
+    Mono<Void> deleteById(Long id);
 
-    void addAudiosByIdForUser(Long userId, List<Long> audiosId);
+    Flux<UploadedByUsers> addAudiosByIdForUser(Long userId, List<Long> audiosId);
 
-    void deleteAudiosByIdForUser(Long userId, List<Long> audiosId);
+    Mono<Void> deleteAudiosByIdForUser(Long userId, List<Long> audiosId);
 
-    void deleteByAuthorId(Long id);
+    Mono<Void> deleteByAuthorId(Long id);
+
+    Flux<UploadedByUsers> getAllUploadedByUsers();
 }

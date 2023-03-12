@@ -20,6 +20,10 @@ public interface UserFeignClient {
     @PutMapping("/api/v1/user/change-author-id/{authorId}")
     void changeAuthorIdToNull(@PathVariable Long authorId);
 
+//    @CircuitBreaker(name = "userServiceCircuitBreaker", fallbackMethod = "changeAuthorUnavailable")
+//    @PutMapping("/api/v1/user/change-author-id/{authorId}")
+//    Mono<Void> changeAuthorIdToNull(@PathVariable Long authorId);
+
     default UserResponse getUserByIdUnavailable(Exception e) {
         ExceptionResponseStatusChecker.check404StatusAndExceptionFeignType("User", e);
         throw new ServiceUnavailableException("User server is not available", e);
