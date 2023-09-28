@@ -23,7 +23,7 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
     private final AudioService audioService;
     private final UserFeignClient userFeignClient;
-    private final UserWebClient webClient;
+//    private final UserWebClient webClient;
 
 
     @Override
@@ -94,9 +94,12 @@ public class AuthorServiceImpl implements AuthorService {
 //    @Transactional
     public Mono<Void> deleteById(Long id) {
 
-        return webClient.changeAuthorIdToNull(id)
-//                .then(audioService.deleteByAuthorId(id))
-                .then(authorRepository.deleteById(id));
+        //(c KeyCloak это не надо)
+//        return webClient.changeAuthorIdToNull(id)
+////                .then(audioService.deleteByAuthorId(id))
+//                .then(authorRepository.deleteById(id));
+
+        return authorRepository.deleteById(id);
     }
 
 

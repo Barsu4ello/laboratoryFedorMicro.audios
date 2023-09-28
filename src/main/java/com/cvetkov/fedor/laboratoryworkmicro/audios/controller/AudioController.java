@@ -11,6 +11,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -60,18 +63,22 @@ public class AudioController {
 
 
     @PostMapping("/add-audio")
-    // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public Flux<UploadedByUsers> addAudiosForUser(@Valid @RequestBody UserAndAudioRequest request) {
-        return audioService.addAudiosByIdForUser(request.getUserId(), request.getAudiosId());
+     @PreAuthorize("hasAuthority('user')")
+    public Flux<UploadedByUsers> addAudiosForUser(@Valid @RequestBody UserAndAudioRequest request, @AuthenticationPrincipal Jwt jwt) {
+
+//        return audioService.addAudiosByIdForUser(request.getUserId(), request.getAudiosId());
+        return audioService.addAudiosByIdForUser(jwt.getSubject(), request.getAudiosId());
     }
 
     @DeleteMapping("/delete-audio")
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public Mono<Void> deleteAudiosForUser(@Valid @RequestBody UserAndAudioRequest request) {
-       return audioService.deleteAudiosByIdForUser(request.getUserId(), request.getAudiosId());
+    public Mono<Void> deleteAudiosForUser(@Valid @RequestBody UserAndAudioRequest request,  @AuthenticationPrincipal Jwt jwt) {
+//       return audioService.deleteAudiosByIdForUser(request.getUserId(), request.getAudiosId());
+       return audioService.deleteAudiosByIdForUser(jwt.getSubject(), request.getAudiosId());
     }
 
     @GetMapping("/all-aploaded-by-users")
+    @PreAuthorize("hasAuthority('admin')")
     // @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public Flux<UploadedByUsers> getAllUploadedByUsers() {
        return audioService.getAllUploadedByUsers();

@@ -24,9 +24,11 @@ public interface AudioService {
 
     Mono<Void> deleteById(Long id);
 
-    Flux<UploadedByUsers> addAudiosByIdForUser(Long userId, List<Long> audiosId);
+//    Flux<UploadedByUsers> addAudiosByIdForUser(Long userId, List<Long> audiosId);
+    Flux<UploadedByUsers> addAudiosByIdForUser(String userId, List<Long> audiosId);
 
-    Mono<Void> deleteAudiosByIdForUser(Long userId, List<Long> audiosId);
+//    Mono<Void> deleteAudiosByIdForUser(Long userId, List<Long> audiosId);
+    Mono<Void> deleteAudiosByIdForUser(String userId, List<Long> audiosId);
 
     Mono<Void> deleteByAuthorId(Long id);
 

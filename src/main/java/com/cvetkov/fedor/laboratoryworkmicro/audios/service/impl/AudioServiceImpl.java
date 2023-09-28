@@ -29,7 +29,7 @@ public class AudioServiceImpl implements AudioService {
     private final AudioRepository audioRepository;
     private final UploadedByUsersRepository uploadedByUsersRepository;
     private final UserFeignClient userFeignClient;
-    private final UserWebClient webClient;
+//    private final UserWebClient webClient;
 
     private final TransactionalOperator operator;
     private final ConnectionFactory connectionFactory;
@@ -102,9 +102,12 @@ public class AudioServiceImpl implements AudioService {
 
     @Override
 //    @Transactional
-    public Flux<UploadedByUsers> addAudiosByIdForUser(Long userId, List<Long> audiosId) {
-//        Проверим есть такой пользователь в микросервисе users, иначе будет FeignException
-      webClient.getUserById(userId);
+//    public Flux<UploadedByUsers> addAudiosByIdForUser(Long userId, List<Long> audiosId) {
+    public Flux<UploadedByUsers> addAudiosByIdForUser(String userId, List<Long> audiosId) {
+//        Проверим есть такой пользователь в микросервисе users, иначе будет FeignException (c KeyCloak это не надо)
+//      webClient.getUserById(userId);
+
+
 
         List<UploadedByUsers> uploadedByUsers = new ArrayList<>();
         for (Long audioId : audiosId) {
@@ -115,7 +118,8 @@ public class AudioServiceImpl implements AudioService {
     }
 
     @Override
-    public Mono<Void> deleteAudiosByIdForUser(Long userId, List<Long> audiosId) {
+//    public Mono<Void> deleteAudiosByIdForUser(Long userId, List<Long> audiosId) {
+    public Mono<Void> deleteAudiosByIdForUser(String userId, List<Long> audiosId) {
         return uploadedByUsersRepository.deleteAllByUserIdAndAudioIds(userId, audiosId);
     }
 

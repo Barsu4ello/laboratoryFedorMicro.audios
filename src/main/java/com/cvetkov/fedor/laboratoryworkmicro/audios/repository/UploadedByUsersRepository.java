@@ -21,5 +21,5 @@ public interface UploadedByUsersRepository extends ReactiveCrudRepository<Upload
 
     @Modifying
     @Query("delete from audios.uploaded_by_users u where u.user_id = :userId and u.audio_id in (:audioIds)")
-    Mono<Void> deleteAllByUserIdAndAudioIds(Long userId, List<Long> audioIds);
+    Mono<Void> deleteAllByUserIdAndAudioIds(String userId, List<Long> audioIds);
 }
